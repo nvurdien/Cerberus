@@ -7,12 +7,18 @@
 //
 
 import UIKit
+import CoreLocation
 
 
 class ViewController: UIViewController {
     
+    var locationManager : CLLocationManager?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.enableLocationServices()
+        locationManager.startUpdatingLocation()
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -22,11 +28,13 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    let locationManager = CLLocationManager()
+    
+    
     func enableLocationServices() {
+        
         locationManager.delegate = self
         
-        switch CLLocationManager.authorizationStatus() {
+        switch locationManager.authorizationStatus() {
         case .notDetermined:
             // Request always authorization
             locationManager.requestAlwaysAuthorization()
@@ -46,29 +54,53 @@ class ViewController: UIViewController {
             // Enable any of your app's location features
             enableMyAlwaysFeatures()
             break
+        default:
+            break
         }
     }
-}
-
-let locationManager = CLLocationManager()
-func startReceivingLocationChanges() {
-    let authorizationStatus = CLLocationManager.authorizationStatus()
-    if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
-        // User has not authorized access to location information.
-        return
+    
+    
+    func startReceivingLocationChanges() {
+        
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
+            // User has not authorized access to location information.
+            return
+        }
+        // Do not start services that aren't available.
+        if !CLLocationManager.locationServicesEnabled() {
+            // Location services is not available.
+            return
+        }
+        // Configure and start the service.
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.distanceFilter = 100.0  // In meters.
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+        
     }
-    // Do not start services that aren't available.
-    if !CLLocationManager.locationServicesEnabled() {
-        // Location services is not available.
-        return
+    
+    // MARK: - CoreLocation Delegate Methods
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        
+        locationManager.stopUpdatingLocation()
+        removeLoadingView()
+        if ((error) != nil) {
+            print(error)
+        }
     }
-    // Configure and start the service.
-    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-    locationManager.distanceFilter = 100.0  // In meters.
-    locationManager.delegate = self
-    locationManager.startUpdatingLocation()
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        
+        var locationArray = locations as NSArray
+        var locationObj = locationArray.lastObject as CLLocation
+        var coord = locationObj.coordinate
+        longitude.text = coord.longitude
+        latitude.text = coord.latitude
+        longitude.text = "\(coord.longitude)"
+        latitude.text = "\(coord.latitude)"
+        
+    }
+    
+    
 }
-
-
-}
-
