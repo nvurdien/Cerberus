@@ -10,9 +10,9 @@ import UIKit
 import CoreLocation
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
-    var locationManager : CLLocationManager?
+    let locationManager = CLLocationManager();
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +27,12 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func disableMyLocationBasedFeatures(){};
+    
+    func enableMyAlwaysFeatures(){};
+    
+    func removeLoadingView(){};
     
     
     
@@ -43,11 +49,6 @@ class ViewController: UIViewController {
         case .restricted, .denied:
             // Disable location features
             disableMyLocationBasedFeatures()
-            break
-            
-        case .authorizedWhenInUse:
-            // Enable basic location features
-            enableMyWhenInUseFeatures()
             break
             
         case .authorizedAlways:

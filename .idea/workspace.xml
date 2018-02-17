@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="be910cbb-bf9a-4c1c-aab6-84d24c0178d5" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Cerberus.xcworkspace/xcuserdata/navievurdien.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/Cerberus.xcworkspace/xcuserdata/navievurdien.xcuserdatad/UserInterfaceState.xcuserstate" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -102,12 +103,12 @@
       <option name="presentableId" value="Default" />
       <updated>1518881539839</updated>
       <workItem from="1518881541150" duration="204000" />
-      <workItem from="1518890450862" duration="1496000" />
+      <workItem from="1518890450862" duration="1542000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1700000" />
+    <option name="totallyTimeSpent" value="1746000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="39" y="22" width="1400" height="822" extended-state="0" />
