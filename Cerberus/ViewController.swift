@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import CoreLocation
+import NavisensMaps
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
     super.viewDidLoad()
@@ -23,6 +25,15 @@ class ViewController: UIViewController {
     }
     
     let locationManager = CLLocationManager()
+    
+    func disableMyLocationBasedFeatures(){}
+    
+    func enableMyWhenInUseFeatures(){}
+    
+    func enableMyAlwaysFeatures(){}
+    
+    
+    
     func enableLocationServices() {
         locationManager.delegate = self
         
@@ -47,10 +58,8 @@ class ViewController: UIViewController {
             enableMyAlwaysFeatures()
             break
         }
-    }      
-}
-
-    let locationManager = CLLocationManager()
+    }
+    
     func startReceivingLocationChanges() {
         let authorizationStatus = CLLocationManager.authorizationStatus()
         if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
