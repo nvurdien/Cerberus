@@ -7,51 +7,61 @@
 //
 
 import UIKit
+import CoreLocation
 
 
 class ViewController: UIViewController {
+    
+    var locationManager : CLLocationManager?
 
     override func viewDidLoad() {
-    super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+        super.viewDidLoad()
+        self.enableLocationServices()
+        locationManager.startUpdatingLocation()
+ 
+        // Do any additional setup after loading the view, typically from a nib.
     }
 
 
     override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
-    let locationManager = CLLocationManager()
+    
+    
     func enableLocationServices() {
+        
         locationManager.delegate = self
         
-        switch CLLocationManager.authorizationStatus() {
-        case .notDetermined:
-            // Request always authorization
-            locationManager.requestAlwaysAuthorization()
-            break
-            
-        case .restricted, .denied:
-            // Disable location features
-            disableMyLocationBasedFeatures()
-            break
-            
-        case .authorizedWhenInUse:
-            // Enable basic location features
-            enableMyWhenInUseFeatures()
-            break
-            
-        case .authorizedAlways:
-            // Enable any of your app's location features
-            enableMyAlwaysFeatures()
-            break
+        switch locationManager.authorizationStatus() {
+            case .notDetermined:
+                // Request always authorization
+                locationManager.requestAlwaysAuthorization()
+                break
+                
+            case .restricted, .denied:
+                // Disable location features
+                disableMyLocationBasedFeatures()
+                break
+                
+            case .authorizedWhenInUse:
+                // Enable basic location features
+                enableMyWhenInUseFeatures()
+                break
+                
+            case .authorizedAlways:
+                // Enable any of your app's location features
+                enableMyAlwaysFeatures()
+                break
+            default:
+                break
         }
-    }      
-}
+    }
 
-    let locationManager = CLLocationManager()
+
     func startReceivingLocationChanges() {
+        
         let authorizationStatus = CLLocationManager.authorizationStatus()
         if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
             // User has not authorized access to location information.
@@ -67,6 +77,29 @@ class ViewController: UIViewController {
         locationManager.distanceFilter = 100.0  // In meters.
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
+        
+    }
+    
+    // MARK: - CoreLocation Delegate Methods
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        
+        locationManager.stopUpdatingLocation()
+        removeLoadingView()
+        if ((error) != nil) {
+            print(error)
+        }
+    }
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        
+        var locationArray = locations as NSArray
+        var locationObj = locationArray.lastObject as CLLocation
+        var coord = locationObj.coordinate
+        longitude.text = coord.longitude
+        latitude.text = coord.latitude
+        longitude.text = "\(coord.longitude)"
+        latitude.text = "\(coord.latitude)"
+        
     }
 
 
