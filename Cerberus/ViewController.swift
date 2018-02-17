@@ -13,14 +13,47 @@ import CoreLocation
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager();
+    @IBOutlet weak var longitude: UILabel!
+    @IBOutlet weak var latitude: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.enableLocationServices()
-        locationManager.startUpdatingLocation()
+        if (CLLocationManager.locationServicesEnabled()) {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+            
+        } else {
+            print("Location services are not enabled");
+        }
+    }
         
         // Do any additional setup after loading the view, typically from a nib.
-    }
+        
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+            locationManager.stopUpdatingLocation()
+            removeLoadingView()
+            if ((error) != nil) {
+                print(error)
+            }
+        }
+        
+        func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+            
+            var currentLocation: CLLocation!
+            
+            if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+                CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+                
+                currentLocation = locationManager.location;
+                longitude.text = "\(currentLocation.coordinate.longitude)"
+                latitude.text = "\(currentLocation.coordinate.latitude)"
+                
+            }
+            
+            
+        }
     
     
     override func didReceiveMemoryWarning() {
@@ -40,7 +73,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         locationManager.delegate = self
         
-        switch locationManager.authorizationStatus() {
+        switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
             // Request always authorization
             locationManager.requestAlwaysAuthorization()
@@ -89,18 +122,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if ((error) != nil) {
             print(error)
         }
-    }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        
-        var locationArray = locations as NSArray
-        var locationObj = locationArray.lastObject as CLLocation
-        var coord = locationObj.coordinate
-        longitude.text = coord.longitude
-        latitude.text = coord.latitude
-        longitude.text = "\(coord.longitude)"
-        latitude.text = "\(coord.latitude)"
-        
     }
     
     
